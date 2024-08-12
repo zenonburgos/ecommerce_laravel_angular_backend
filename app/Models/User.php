@@ -3,6 +3,9 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\Sale\Cart;
+use App\Models\Sale\UserAddress;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
@@ -70,5 +73,13 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function carts(){
+        return $this->hasMany(Cart::class, "user_id");
+    }
+
+    public function address(){
+        return $this->hasMany(UserAddress::class, "user_id");
     }
 }
