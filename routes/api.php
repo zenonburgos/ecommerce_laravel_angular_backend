@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\Product\ProductVariationsAnidadoController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\HomeController;
+use App\Http\Controllers\Ecommerce\SaleController;
 use App\Http\Controllers\Ecommerce\UserAddressController;
 use Illuminate\Routing\Router;
 
@@ -102,7 +103,9 @@ Route::group([
         Route::delete("carts/delete_all", [CartController::class, "delete_all"]);
         Route::post("carts/apply_cupon", [CartController::class, "apply_cupon"]);
         Route::resource('carts', CartController::class);
-
         Route::resource('user_address', UserAddressController::class);
+
+        Route::get("sale/{id}", [SaleController::class, "show"]);
+        Route::post("checkout", [SaleController::class, "store"]);
     });
 });

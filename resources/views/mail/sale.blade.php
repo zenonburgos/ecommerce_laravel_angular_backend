@@ -288,7 +288,7 @@
 																								<tr>
 																									<td class="fluid-img img-center pb-50"
 																										style="font-size:0pt; line-height:0pt; text-align:center; padding-bottom: 50px;">
-																										<img src="https://cdn-icons-png.flaticon.com/512/1162/1162499.png"
+																										<img src="https://cdn-icons-png.flaticon.com/512/994/994825.png"
 																											width="331"
 																											height="268"
 																											editable="true"
@@ -300,7 +300,7 @@
 																									<td class="title-36 a-center pb-15"
 																										style="font-size:36px; line-height:40px; color:#282828; font-family:'PT Sans', Arial, sans-serif; min-width:auto !important; text-align:center; padding-bottom: 15px;">
 																										<multiline>
-																											<strong>Tus productos te esperan.</strong>
+																											<strong>Gracias por tu compra.</strong>
 																										</multiline>
 																									</td>
 																								</tr>
@@ -309,8 +309,8 @@
 																										style="font-size:16px; color:#6e6e6e; font-family:'PT Sans', Arial, sans-serif; min-width:auto !important; line-height: 26px; text-align:center; padding-bottom: 25px;">
 																										<multiline>
 																											Great news,
-																											<b>{{ $user->name. ' ' . $user->surname }}!</b>  Tu
-																											orden&rsquo;s
+																											¡{{ $user->name.' '. $user->surname }}! Your
+																											order&rsquo;s
 																											on the truck
 																											and heading
 																											your way.
@@ -341,7 +341,7 @@
 																															style="display: block; padding: 15px 35px; text-decoration:none; color:#ffffff;">
 																															<span
 																																class="link c-white"
-																																style="text-decoration:none; color:#ffffff;">Ir a la web</span>
+																																style="text-decoration:none; color:#ffffff;"># {{ $sale->n_transaction }}</span>
 																														</a>
 																													</multiline>
 																												</td>
@@ -431,9 +431,7 @@
 																															<td class="text-16"
 																																style="font-size:16px; line-height:20px; color:#6e6e6e; font-family:'PT Sans', Arial, sans-serif; text-align:left; min-width:auto !important;">
 																																<multiline>
-																																	04/22
-																																	–
-																																	04/25/18
+																																	{{ $sale->created_at->format("Y-m-d h:i A") }}
 																																</multiline>
 																															</td>
 																														</tr>
@@ -466,18 +464,17 @@
 																															<td class="text-16"
 																																style="font-size:16px; line-height:20px; color:#6e6e6e; font-family:'PT Sans', Arial, sans-serif; text-align:left; min-width:auto !important;">
 																																<multiline>
-																																	{{ $user->name }}
-																																	{{ $user->surname }}
-																																	Bergamot
+																																	{{ $sale->sale_address->name . ' ' . $sale->sale_address->surname}}
 																																	<br />
-																																	3409
-																																	S.
-																																	Canondale
-																																	Road
+																																	{{ $sale->sale_address->address }}
 																																	<br />
-																																	Chicago,
-																																	IL
-																																	60301
+																																	{{ $sale->sale_address->street }}
+                                                                                                                                    <br />
+																																	{{ $sale->sale_address->country_region }}
+                                                                                                                                    <br />
+																																	{{ $sale->sale_address->postcode_zip }}
+                                                                                                                                    <br />
+																																	{{ $sale->sale_address->phone }}
 																																</multiline>
 																															</td>
 																														</tr>
@@ -515,8 +512,7 @@
 																										</multiline>
 																									</td>
 																								</tr>
-                                                                                                
-																								@foreach ($carts as $cart)
+																								@foreach ($sale->sale_details as $sale_detail)
 																								<tr>
 																									<td class="pb-30"
 																										style="padding-bottom: 30px;">
@@ -534,7 +530,7 @@
 																														style="font-size:0pt; line-height:0pt; text-align:left;">
 																														<a href="#"
 																															target="_blank"><img
-																																src="{{ env("APP_URL").'storage/'.$cart->product->imagen }}"
+																																src="{{ env("APP_URL").'storage/'.$sale_detail->product->imagen }}"
 																																border="0"
 																																width="230"
 																																height="180"
@@ -559,7 +555,7 @@
 																															<td class="title-20 pb-10"
 																																style="font-size:20px; line-height:24px; color:#282828; font-family:'PT Sans', Arial, sans-serif; text-align:left; min-width:auto !important; padding-bottom: 10px;">
 																																<multiline>
-																																	<strong>{{ $cart->product->title }}</strong>
+																																	<strong>{{ $sale_detail->product->title }}</strong>
 																																</multiline>
 																															</td>
 																														</tr>
@@ -567,7 +563,7 @@
 																															<td class="text-16 lh-26 pb-15"
 																																style="font-size:16px; color:#6e6e6e; font-family:'PT Sans', Arial, sans-serif; text-align:left; min-width:auto !important; line-height: 26px; padding-bottom: 15px;">
 																																<multiline>
-																																	{{ $cart->product->resumen }}
+																																	{{ $sale_detail->product->resumen }}
 																																</multiline>
 																															</td>
 																														</tr>
@@ -575,20 +571,20 @@
 																															<td class="text-16 lh-26 c-black"
 																																style="font-size:16px; font-family:'PT Sans', Arial, sans-serif; text-align:left; min-width:auto !important; line-height: 26px; color:#282828;">
 																																<multiline>
-                                                                                                                                    @if($cart->product_variation)
-                                                                                                                                        <strong>{{ $cart->product_variation->attribute->name }}</strong>
-                                                                                                                                        {{ $cart->product_variation->propertie ? $cart->product_variation->propertie->name : $cart->product_variation->value_add }}
-                                                                                                                                        @if ($cart->product_variation->variation_father)
+                                                                                                                                    @if($sale_detail->product_variation)
+                                                                                                                                        <strong>{{ $sale_detail->product_variation->attribute->name }}</strong>
+                                                                                                                                        {{ $sale_detail->product_variation->propertie ? $sale_detail->product_variation->propertie->name : $sale_detail->product_variation->value_add }}
+                                                                                                                                        @if ($sale_detail->product_variation->variation_father)
                                                                                                                                             <br />
-                                                                                                                                            <strong>{{ $cart->product_variation->variation_father->attribute->name }}:</strong>
-                                                                                                                                            {{ $cart->product_variation->variation_father->propertie ? $cart->product_variation->variation_father->propertie->name : $cart->product_variation->variation_father->value_add }}
+                                                                                                                                            <strong>{{ $sale_detail->product_variation->variation_father->attribute->name }}:</strong>
+                                                                                                                                            {{ $sale_detail->product_variation->variation_father->propertie ? $sale_detail->product_variation->variation_father->propertie->name : $sale_detail->product_variation->variation_father->value_add }}
                                                                                                                                             
                                                                                                                                         @endif
                                                                                                                                     @endif
 																																	
 																																	<br />
 																																	<strong>Total:</strong>
-																																	${{ $cart->total }} {{ $cart->currency }}
+																																	${{ $sale_detail->total }} {{ $sale_detail->currency }}
 																																</multiline>
 																															</td>
 																														</tr>
@@ -598,13 +594,9 @@
 																										</table>
 																									</td>
 																								</tr>
-                                                                                                @php
-                                                                                                    $currency = 'USD'
-                                                                                                @endphp
+                                                                                                
                                                                                                 @endforeach
-                                                                                                @php
-                                                                                                    $currency = $cart->currency;
-                                                                                                @endphp
+																								
 																								<tr>
 																									<td class="pt-10 pb-40"
 																										style="padding-top: 10px; padding-bottom: 40px;">
@@ -654,7 +646,7 @@
 																															<td class="text-16"
 																																style="font-size:16px; line-height:20px; color:#6e6e6e; font-family:'PT Sans', Arial, sans-serif; text-align:left; min-width:auto !important;">
 																																<multiline>
-																																	Paypal, Mercado de pago
+																																	{{ $sale->payment_method }}
 																																</multiline>
 																															</td>
 																														</tr>
@@ -697,7 +689,7 @@
 																																		<td class="title-20 lh-30 mt-right"
 																																			style="font-size:20px; color:#282828; font-family:'PT Sans', Arial, sans-serif; text-align:left; min-width:auto !important; line-height: 30px;">
 																																			<multiline>
-																																				${{ $carts->sum("total") }} {{ $currency }}
+																																				${{ $sale->total }} {{ $sale->currency_payment }}
 																																			</multiline>
 																																		</td>
 																																	</tr>
@@ -748,7 +740,7 @@
 																																		<td class="title-20 lh-30 c-purple pt-10 mt-right"
 																																			style="font-size:20px; font-family:'PT Sans', Arial, sans-serif; text-align:left; min-width:auto !important; line-height: 30px; color:#9128df; padding-top: 10px;">
 																																			<multiline>
-																																				<strong>${{ $carts->sum("total") }}</strong>
+																																				<strong>${{ $sale->total }} {{ $sale->currency_payment }}</strong>
 																																			</multiline>
 																																		</td>
 																																	</tr>
